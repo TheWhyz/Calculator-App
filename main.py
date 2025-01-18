@@ -18,11 +18,36 @@ buttons = [
 clear = QPushButton("Clear")
 delete = QPushButton("<")
 
+
+def button_click():
+    button = app.sender()
+    text = button.text()
+
+    if text == "=":
+        symbol = text_box.text()
+        try:
+            result = eval(symbol)
+            text_box.setText(str(result))
+
+        except Exception as e:
+            print("Error:", e)
+
+    elif text == "Clear":
+        text_box.clear()
+
+    elif text == "<":
+        current_value = text_box.text()
+        text_box.setText(current_value[:-1])
+
+    else:
+        current_value = text_box.text()
+        text_box.setText(current_value + text)
+
 row = 0
 col = 0
 for text in buttons:
     button = QPushButton(text)
-    # button.clicked.connect(None)
+    button.clicked.connect(button_click)
     grid.addWidget(button, row, col)
     col += 1
 
@@ -40,6 +65,9 @@ button_row.addWidget(delete)
 master_layout.addLayout(button_row)
 
 main_window.setLayout(master_layout)
+
+clear.clicked.connect(button_click)
+delete.clicked.connect(button_click)
 
 main_window.show()
 app.exec_()
